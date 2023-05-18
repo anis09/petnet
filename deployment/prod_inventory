@@ -1,0 +1,20 @@
+[prod]
+159.223.147.135 ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
+[prod:vars]
+c_name={{ lookup('env','CI_PROJECT_NAME') }}-prod
+h_name={{ lookup('env','CI_PROJECT_NAME') }}-prod
+ip=192.168.1.2      
+container_port=8080
+branch_name=main
+runner_name=gitlab-org-docker
+network_name=petnet_prod
+registry_url={{ lookup('env','CI_REGISTRY') }}                          
+registry_user={{ lookup('env','GITLAB_REGISTRY_USER') }}     
+registry_password={{ lookup('env','GITLAB_REGISTRY_PASS') }}  
+image_name={{ lookup('env','CI_REGISTRY_IMAGE') }}:{{ lookup('env','CI_COMMIT_SHORT_SHA') }}-prod 
+
+[petnet_network:children]
+prod
+
+[petnet_clean:children]
+prod

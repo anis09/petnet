@@ -1,0 +1,3528 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation for the REST API of Petnet App.",
+    "version": "1.0.0",
+    "title": "Petnet App API",
+    "termsOfService": "",
+    "contact": {
+      "email": "akrambelhajsalem@cyberdivision.xyz"
+    }
+  },
+  "host": "dev-api.pet-net.com.au",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "metadata",
+      "description": "Metadata"
+    },
+    {
+      "name": "auth",
+      "description": "Authentication"
+    },
+    {
+      "name": "upload",
+      "description": "Upload Files"
+    },
+    {
+      "name": "post",
+      "description": "Manage Posts"
+    },
+    {
+      "name": "user",
+      "description": "Manage User"
+    },
+    {
+      "name": "chat",
+      "description": "Chat"
+    }
+  ],
+  "schemes": ["https"],
+  "paths": {
+    "/metadata/suburbs": {
+      "get": {
+        "tags": ["metadata"],
+        "summary": "Get Suburbs",
+        "description": "List of suburbs by zip code.",
+        "operationId": "getSuburbs",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "zipCode",
+            "description": "Zip Code",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSuburbsRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["metadata"],
+        "summary": "Get Suburbs by state",
+        "description": "List of suburbs by state.",
+        "operationId": "getSuburbsByState",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetSuberbsByStateReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetStatesResByState"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/metadata/states": {
+      "get": {
+        "tags": ["metadata"],
+        "summary": "Get States",
+        "description": "List of states",
+        "operationId": "getStateList",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetStatesRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    
+    "/posts": {
+      "post": {
+        "tags": ["post"],
+        "summary": "Create Post",
+        "description": "Create a new post",
+        "operationId": "createPost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreatePostReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AddPostResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["post"],
+        "summary": "Get All Posts",
+        "description": "Get All Posts",
+        "operationId": "getAllPosts",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "postedBy",
+            "description": "Filter by User ID",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "description": "Filter Query",
+            "required": false,
+            "type": "string",
+            "enum": ["RECENTLY_ADDED", "MOST_VIEWED"]
+          },
+          {
+            "in": "query",
+            "name": "petType",
+            "description": "Pet Type Query",
+            "required": false,
+            "type": "string",
+            "enum": ["CAT", "DOG"]
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "description": "State Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petAge",
+            "description": "Filter by Age (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petSize",
+            "description": "Filter by Size (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petExpectedAdultSize",
+            "description": "Filter by Expected Adult Size (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petVeterinaryChecked",
+            "description": "Filter by Veterinary Checked (pass 1 if true, else 0)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petSex",
+            "description": "Filter by Sex (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petGoodWith",
+            "description": "Filter by Good With (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petCoatLength",
+            "description": "Filter by Coat Length (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petCare",
+            "description": "Filter by Care (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petIsInShelter",
+            "description": "Filter by Is In Shelter (pass 1 if true, else 0)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search Post by multiple fields",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPostsResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/posts-v2": {
+      "get": {
+        "tags": ["post"],
+        "summary": "Get All Posts V2",
+        "description": "Get All Posts V2",
+        "operationId": "getAllPostsV2",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "postedBy",
+            "description": "Filter by User ID",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "description": "Filter Query",
+            "required": false,
+            "type": "string",
+            "enum": ["RECENTLY_ADDED", "MOST_VIEWED"]
+          },
+          {
+            "in": "query",
+            "name": "petType",
+            "description": "Pet Type Query",
+            "required": false,
+            "type": "string",
+            "enum": ["CAT", "DOG"]
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "description": "State Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petAge",
+            "description": "Filter by Age (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petSize",
+            "description": "Filter by Size (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petExpectedAdultSize",
+            "description": "Filter by Expected Adult Size (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petVeterinaryChecked",
+            "description": "Filter by Veterinary Checked (pass 1 if true, else 0)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petSex",
+            "description": "Filter by Sex (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petGoodWith",
+            "description": "Filter by Good With (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petCoatLength",
+            "description": "Filter by Coat Length (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petCare",
+            "description": "Filter by Care (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petIsInShelter",
+            "description": "Filter by Is In Shelter (pass 1 if true, else 0)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search Post by multiple fields",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPostsV2Response"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/posts-fav": {
+      "post": {
+        "tags": ["post"],
+        "summary": "Get All Favorites Posts",
+        "description": "Get All Favorites Posts",
+        "operationId": "getAllFavPosts",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPostsResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/posts-unfav/{postId}": {
+      "post": {
+        "tags": ["post"],
+        "summary": "unfav Post",
+        "description": "Replace the {postId} by the id of the post desired to remove mark favorite",
+        "operationId": "unLikePost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FavoritePostResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/posts/{postId}": {
+      "put": {
+        "tags": ["post"],
+        "summary": "Edit exisiting Post",
+        "description": "Replace the {postId} by the id of the post desired to edit , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "updatePost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EditPostReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EditPostResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["post"],
+        "summary": "Fav Post",
+        "description": "Replace the {postId} by the id of the post desired to mark as favorite",
+        "operationId": "likePost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/FavoritePostResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["post"],
+        "summary": "Delete exisiting Post",
+        "description": "Replace the {postId} by the id of the post desired to delete , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "deletePost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EditPostResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["post"],
+        "summary": "get exisiting Post",
+        "description": "Replace the {postId} by the id of the post desired to fetch ",
+        "operationId": "getSinglePost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSinglePostResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/auth/check": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "Check Email",
+        "description": "Check if email is exists.",
+        "operationId": "checkEmail",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "description": "Email",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CheckEmailRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-up": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign Up User",
+        "description": "The user fills in all the fields on the form. If the request is accepted, he receives an email with a account verify link.",
+        "operationId": "signUpUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignUpUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignUpUserRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Email Already Exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-up/breeder": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign Up Breeder",
+        "description": "The breeder user fills in all the fields on the form. If the request is accepted, he receives an email with a account verify link.",
+        "operationId": "signUpBreeder",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignUpBreederReq"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignUpBreederRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Email Already Exists",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/account-verify": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Verify User Account",
+        "description": "After receiving an email with a verification code, the User must verify their account.",
+        "operationId": "verifyUserAccount",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyUserAccountReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/VerifyUserAccountRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "User Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Account Already Verified || Invalid Verification Code",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/code-resend": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Resend Verification Code Email",
+        "description": "The User can request to receive the verification code again.",
+        "operationId": "resendVerificationCodeEmail",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResendVerificationCodeEmailReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResendVerificationCodeEmailRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "User Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Account Already Verified",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/password-reset/email": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Send Password Reset Email",
+        "description": "After forgetting his password, the user can request that it be reset. They will receive an email with a password reset link.",
+        "operationId": "sendPasswordResetEmail",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SendPasswordResetEmailReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SendPasswordResetEmailRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Email Not Found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/password-reset": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Reset Password",
+        "description": "The user can reset his password after requesting the forgotten password.",
+        "operationId": "resetPassword",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Invalid Password Recovery Token",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-in": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign In User",
+        "description": "The user must be logged in to access the application.",
+        "operationId": "signInUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignInUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignInUserRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Wrong Credentials",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Account Has Been Suspended",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-in/google": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign In With Google",
+        "description": "The user must be logged in to access the application.",
+        "operationId": "signInWithGoogle",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignInUserWithReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignInUserRes"
+            }
+          },
+          "401": {
+            "description": "Wrong Credentials",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-in/facebook": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign In With Facebook",
+        "description": "The user must be logged in to access the application.",
+        "operationId": "signInWithFacebook",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignInUserWithReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignInUserRes"
+            }
+          },
+          "401": {
+            "description": "Wrong Credentials",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-in/apple": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign In With Apple",
+        "description": "The user must be logged in to access the application.",
+        "operationId": "signInWithApple",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignInWithAppleReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignInUserRes"
+            }
+          },
+          "401": {
+            "description": "Wrong Credentials",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-out": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign Out User",
+        "description": "The authenticated user can be logged out.",
+        "operationId": "signOutUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignOutUserRes"
+            }
+          },
+          "401": {
+            "description": "Wrong Credentials",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/upload/s3": {
+      "post": {
+        "tags": ["upload"],
+        "summary": "Upload S3",
+        "description": "Upload multiple files to AWS S3",
+        "operationId": "uploadS3",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "file",
+            "name": "file",
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UploadS3Res"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get Current User",
+        "description": "Get authenticated user profile.",
+        "operationId": "getCurrentUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetCurrentUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["user"],
+        "summary": "Update Current User",
+        "description": "Update authenticated user profile.",
+        "operationId": "updateCurrentUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCurrentUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateCurrentUserRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["user"],
+        "summary": "Delete Current User",
+        "description": "Delete authenticated user profile.",
+        "operationId": "deleteCurrentUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DeleteCurrentUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get  User",
+        "description": "Get user profile by Id",
+        "operationId": "getCurrentUserById",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "Id of the user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetCurrentUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/users/company": {
+      "put": {
+        "tags": ["user"],
+        "summary": "Update Breeder Company",
+        "description": "Update authenticated breeder company.",
+        "operationId": "updateBreederCompany",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCompanyReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateCompanyRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/users/password": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Update Password",
+        "description": "Update password.",
+        "operationId": "updatePassword",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatePasswordReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdatePasswordRes"
+            }
+          },
+          "401": {
+            "description": "Wrong Credentials",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "409": {
+            "description": "Wrong Password",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/chat/messages": {
+      "post": {
+        "tags": ["chat"],
+        "summary": "Send Message",
+        "description": "Send a new message",
+        "operationId": "sendMessage",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SendMessageReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SendMessageRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get Messages",
+        "description": "Get Conversation Messages",
+        "operationId": "getMessages",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "conversationId",
+            "description": "conversation Id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetMessagesRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/chat/conversations/user": {
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get Conversation User",
+        "description": "Get Conversation User",
+        "operationId": "getConversationUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "conversationId",
+            "description": "conversation Id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetConversationUserRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/chat/conversations": {
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get Conversations",
+        "description": "Get Conversations",
+        "operationId": "getConversations",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search Post by User First Name or Last Name",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetConversationsRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/notifications": {
+      "get": {
+        "tags": ["notifications"],
+        "summary": "Get Notifications",
+        "description": "Get Notifications",
+        "operationId": "getNotifications",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetNotificationsResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["notifications"],
+        "summary": "Marked Readen ",
+        "description": "Mark Notification as readen",
+        "operationId": "markAsReaden",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/markAsReadenReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/markAsReaden"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    
+    "/notifications/v2": {
+      "get": {
+        "tags": ["notifications-grouped"],
+        "summary": "Get Notifications grouped by",
+        "description": "Get Notifications",
+        "operationId": "getNotificationsV2",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetNotificationsResponseGroupped"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+    
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "GetSuburbsRes": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string"
+        },
+        "suburbs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GetSuberbsByStateReq": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "GetStatesRes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "GetStatesResByState": {
+      "type": "object",
+      "properties": {
+        "suburbs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "postCode": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "SignUpUserReq": {
+      "type": "object",
+      "required": [
+        "email",
+        "password",
+        "firstName",
+        "lastName",
+        "state",
+        "suburb",
+        "zipCode"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "suburb": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "CheckEmailRes": {
+      "type": "object",
+      "properties": {
+        "isExists": {
+          "type": "boolean"
+        }
+      }
+    },
+    "SignUpUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "userId": {
+          "type": "string"
+        }
+      }
+    },
+    "SignUpBreederReq": {
+      "type": "object",
+      "required": [
+        "email",
+        "password",
+        "firstName",
+        "lastName",
+        "phone",
+        "company"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "company": {
+          "type": "object",
+          "required": [
+            "name",
+            "breederPrefix",
+            "email",
+            "phone",
+            "state",
+            "suburb",
+            "address",
+            "zipCode",
+            "bio"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "breederPrefix": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "suburb": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "zipCode": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "bio": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "SignUpBreederRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "companyId": {
+          "type": "string"
+        }
+      }
+    },
+    "VerifyUserAccountReq": {
+      "type": "object",
+      "required": ["verificationCode"],
+      "properties": {
+        "verificationCode": {
+          "type": "string"
+        }
+      }
+    },
+    "VerifyUserAccountRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ResendVerificationCodeEmailReq": {
+      "type": "object",
+      "required": ["email"],
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "ResendVerificationCodeEmailRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "SendPasswordResetEmailReq": {
+      "type": "object",
+      "required": ["email"],
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "SendPasswordResetEmailRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ResetPasswordReq": {
+      "type": "object",
+      "required": ["passwordRecoveryToken", "newPassword"],
+      "properties": {
+        "passwordRecoveryToken": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "ResetPasswordRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "SignInUserReq": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "SignInUserWithReq": {
+      "type": "object",
+      "required": ["accessToken"],
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "Google OAuth2 Access Token"
+        }
+      }
+    },
+    "SignInWithAppleReq": {
+      "type": "object",
+      "required": ["userIdentifier"],
+      "properties": {
+        "userIdentifier": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "familyName": {
+          "type": "string"
+        },
+        "givenName": {
+          "type": "string"
+        }
+      }
+    },
+    "SignInUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "lastSignIn": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        }
+      }
+    },
+    "SignOutUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UploadS3Res": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "AddPostResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "createdPostId": {
+          "type": "string"
+        }
+      }
+    },
+    "EditPostResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "FavoritePostResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "GetSinglePostResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "post": {
+          "type": "object",
+          "properties": {
+            "postId": {
+              "type": "string"
+            },
+            "kind": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "price": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "adoptionFee": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "pet": {
+              "type": "object",
+              "properties": {
+                "petType": {
+                  "type": "string"
+                },
+                "microshipId": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "breed": {
+                  "type": "string"
+                },
+                "dadBreed": {
+                  "type": "string"
+                },
+                "momBreed": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "string"
+                },
+                "isDesexed": {
+                  "type": "boolean"
+                },
+                "age": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "string"
+                },
+                "veterinaryChecked": {
+                  "type": "boolean"
+                },
+                "isVaccinated": {
+                  "type": "boolean"
+                },
+                "coatLength": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "isInShelter": {
+                  "type": "boolean"
+                },
+                "care": {
+                  "type": "string"
+                },
+                "expectedAdultSize": {
+                  "type": "string"
+                },
+                "goodWith": {
+                  "type": "string"
+                }
+              }
+            },
+            "location": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "suburb": {
+                  "type": "string"
+                },
+                "latitude": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "longitude": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            },
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "childImages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "parentImages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "postedBy": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "suburb": {
+                  "type": "string"
+                },
+                "zipCode": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "breederPrefix": {
+                  "type": "string"
+                },
+                "breederBio": {
+                  "type": "string"
+                }
+              }
+            },
+            "likes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      }
+    },
+    "GetPostsResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "posts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "postId": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "price": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "adoptionFee": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "pet": {
+                "type": "object",
+                "properties": {
+                  "petType": {
+                    "type": "string"
+                  },
+                  "microshipId": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "breed": {
+                    "type": "string"
+                  },
+                  "dadBreed": {
+                    "type": "string"
+                  },
+                  "momBreed": {
+                    "type": "string"
+                  },
+                  "sex": {
+                    "type": "string"
+                  },
+                  "isDesexed": {
+                    "type": "boolean"
+                  },
+                  "age": {
+                    "type": "string"
+                  },
+                  "size": {
+                    "type": "string"
+                  },
+                  "veterinaryChecked": {
+                    "type": "boolean"
+                  },
+                  "isVaccinated": {
+                    "type": "boolean"
+                  },
+                  "coatLength": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "string"
+                  },
+                  "isInShelter": {
+                    "type": "boolean"
+                  },
+                  "care": {
+                    "type": "string"
+                  },
+                  "expectedAdultSize": {
+                    "type": "string"
+                  },
+                  "goodWith": {
+                    "type": "string"
+                  }
+                }
+              },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "string"
+                  },
+                  "suburb": {
+                    "type": "string"
+                  },
+                  "latitude": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                }
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "childImages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "parentImages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "postedBy": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "suburb": {
+                    "type": "string"
+                  },
+                  "zipCode": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "avatarUrl": {
+                    "type": "string"
+                  },
+                  "breederPrefix": {
+                    "type": "string"
+                  },
+                  "breederBio": {
+                    "type": "string"
+                  }
+                }
+              },
+              "likes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetPostsV2Response": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "posts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "postId": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "adoptionFee": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "breed": {
+                "type": "string"
+              },
+              "dadBreed": {
+                "type": "string"
+              },
+              "momBreed": {
+                "type": "string"
+              },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "string"
+                  },
+                  "suburb": {
+                    "type": "string"
+                  }
+                }
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "childImages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "isLiked": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "commonPostsResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "CreatePostReq": {
+      "type": "object",
+      "required": ["kind", "title", "description", "pet"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["STANDARD", "BREEDER"]
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "adoptionFee": {
+          "type": "integer"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "childImages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "parentImages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "pet": {
+          "type": "object",
+          "properties": {
+            "petType": {
+              "type": "string",
+              "enum": ["CAT", "DOG"]
+            },
+            "microshipId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "breed": {
+              "type": "string"
+            },
+            "dadBreed": {
+              "type": "string"
+            },
+            "momBreed": {
+              "type": "string"
+            },
+            "sex": {
+              "type": "string"
+            },
+            "isDesexed": {
+              "type": "boolean"
+            },
+            "age": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "veterinaryChecked": {
+              "type": "boolean"
+            },
+            "isVaccinated": {
+              "type": "boolean"
+            },
+            "coatLength": {
+              "type": "string"
+            },
+            "color": {
+              "type": "string"
+            },
+            "isInShelter": {
+              "type": "boolean"
+            },
+            "care": {
+              "type": "string"
+            },
+            "expectedAdultSize": {
+              "type": "string"
+            },
+            "goodWith": {
+              "type": "string"
+            }
+          }
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string"
+            },
+            "suburb": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "EditPostReq": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "adoptionFee": {
+          "type": "integer"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "childImages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "parentImages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "pet": {
+          "type": "object",
+          "properties": {
+            "petType": {
+              "type": "string",
+              "enum": ["CAT", "DOG"]
+            },
+            "microshipId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "breed": {
+              "type": "string"
+            },
+            "dadBreed": {
+              "type": "string"
+            },
+            "momBreed": {
+              "type": "string"
+            },
+            "sex": {
+              "type": "string"
+            },
+            "isDesexed": {
+              "type": "boolean"
+            },
+            "age": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "veterinaryChecked": {
+              "type": "boolean"
+            },
+            "isVaccinated": {
+              "type": "boolean"
+            },
+            "coatLength": {
+              "type": "string"
+            },
+            "color": {
+              "type": "string"
+            },
+            "isInShelter": {
+              "type": "boolean"
+            },
+            "care": {
+              "type": "string"
+            },
+            "expectedAdultSize": {
+              "type": "string"
+            },
+            "goodWith": {
+              "type": "string"
+            }
+          }
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string"
+            },
+            "suburb": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "GetCurrentUserRes": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "account": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "isVerified": {
+              "type": "boolean"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "suburb": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "zipCode": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "bio": {
+              "type": "string"
+            },
+            "avatarUrl": {
+              "type": "string"
+            }
+          }
+        },
+        "company": {
+          "type": "object",
+          "properties": {
+            "companyId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "breederPrefix": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "suburb": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "zipCode": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "bio": {
+              "type": "string"
+            },
+            "website": {
+              "type": "string"
+            },
+            "logo": {
+              "type": "string"
+            },
+            "cover": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "UpdateCurrentUserReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "suburb": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bio": {
+          "type": "string"
+        },
+        "avatarUrl": {
+          "type": "string"
+        },
+        "deviceId": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateCurrentUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdateCompanyReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "breederPrefix": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "suburb": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bio": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "cover": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateCompanyRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "DeleteCurrentUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdatePasswordReq": {
+      "type": "object",
+      "required": ["oldPassword", "newPassword"],
+      "properties": {
+        "oldPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdatePasswordRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "SendMessageReq": {
+      "type": "object",
+      "required": ["receiverId", "messageType", "body"],
+      "properties": {
+        "receiverId": {
+          "type": "string"
+        },
+        "messageType": {
+          "type": "string",
+          "enum": ["TEXT", "IMAGE", "FILE"]
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    },
+    "SendMessageRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "conversationId": {
+          "type": "string"
+        }
+      }
+    },
+    "GetConversationsRes": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "conversations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "conversationId": {
+                "type": "string"
+              },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "avatarUrl": {
+                    "type": "string"
+                  },
+                  "isArchived": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "lastMessage": {
+                "type": "object",
+                "properties": {
+                  "messageType": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "sentAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              },
+              "unseen": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetConversationUserRes": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "userId": {
+              "type": "string"
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "avatarUrl": {
+              "type": "string"
+            },
+            "isArchived": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "GetMessagesRes": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hasNext": {
+          "type": "boolean"
+        },
+        "pageNumber": {
+          "type": "string"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "messageId": {
+                "type": "string"
+              },
+              "senderType": {
+                "type": "string",
+                "description": "must be 'ME' or 'OTHER'"
+              },
+              "messageType": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "sentAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "seenAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetNotificationsResponse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "receiverId": {
+            "type": "string"
+          },
+          "senderId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "entityId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isReaden": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "GetNotificationsResponseGroupped": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          },
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "entityId": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "markAsReaden": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "markAsReadenReq": {
+      "type": "object",
+      "properties": {
+        "postId": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

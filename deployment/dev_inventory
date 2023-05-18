@@ -1,0 +1,20 @@
+[dev]
+161.35.2.127 ansible_ssh_user=root ansible_python_interpreter=/usr/bin/python3
+[dev:vars]
+c_name={{ lookup('env','CI_PROJECT_NAME') }}-dev
+h_name={{ lookup('env','CI_PROJECT_NAME') }}-dev
+ip=192.168.1.2      
+container_port=8080
+branch_name=develop
+runner_name=gitlab-org-docker
+network_name=petnet_dev
+registry_url={{ lookup('env','CI_REGISTRY') }}                          
+registry_user={{ lookup('env','GITLAB_REGISTRY_USER') }}     
+registry_password={{ lookup('env','GITLAB_REGISTRY_PASS') }}  
+image_name={{ lookup('env','CI_REGISTRY_IMAGE') }}:{{ lookup('env','CI_COMMIT_SHORT_SHA') }}-dev 
+
+[petnet_network:children]
+dev
+
+[petnet_clean:children]
+dev

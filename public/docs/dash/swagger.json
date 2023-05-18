@@ -1,0 +1,5585 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation for the REST API of Petnet Dashboard.",
+    "version": "1.0.0",
+    "title": "Petnet Dashboard API",
+    "termsOfService": "",
+    "contact": {
+      "email": "akrambelhajsalem@cyberdivision.xyz"
+    }
+  },
+  "host": "dev-api.pet-net.com.au",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "metadata",
+      "description": "Metadata"
+    },
+    {
+      "name": "auth",
+      "description": "Authentication"
+    },
+    {
+      "name": "upload",
+      "description": "Upload Files"
+    },
+    {
+      "name": "posts",
+      "description": "Manage Posts"
+    },
+    {
+      "name": "user",
+      "description": "Manage Current User"
+    },
+    {
+      "name": "users",
+      "description": "Manage Users"
+    },
+    {
+      "name": "chat",
+      "description": "Chat"
+    },
+    {
+      "name": "kanban",
+      "description": "Manage Kanban"
+    },
+    {
+      "name": "googleAnalytics",
+      "description": "Google Analytics"
+    }
+  ],
+  "schemes": ["https"],
+  "paths": {
+    "/admin/metadata/suburbs": {
+      "get": {
+        "tags": ["metadata"],
+        "summary": "Get Suburbs",
+        "description": "List of suburbs by zip code.",
+        "operationId": "getSuburbs",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "zipCode",
+            "description": "Zip Code",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSuburbsRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["metadata"],
+        "summary": "Get Suburbs by state",
+        "description": "List of suburbs by state.",
+        "operationId": "getSuburbsByState",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetSuberbsByStateReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetStatesResByState"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/metadata/states": {
+      "get": {
+        "tags": ["metadata"],
+        "summary": "Get States",
+        "description": "List of states",
+        "operationId": "getStateList",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetStatesRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/auth/password-reset/email": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Send Password Reset Email",
+        "description": "After forgetting his password, the user can request that it be reset. They will receive an email with a password reset link.",
+        "operationId": "sendPasswordResetEmail",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SendPasswordResetEmailReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SendPasswordResetEmailRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/auth/password-reset": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Reset Password",
+        "description": "The user can reset his password after requesting the forgotten password.",
+        "operationId": "resetPassword",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/auth/sign-out": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign Out User",
+        "description": "The authenticated user can be logged out.",
+        "operationId": "signOutUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignOutUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/auth/sign-in": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Sign In Admin",
+        "description": "The admin user must be logged in to access the dashboard.",
+        "operationId": "signInAdmin",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignInUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SignInUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/upload/s3": {
+      "post": {
+        "tags": ["upload"],
+        "summary": "Upload S3",
+        "description": "Upload multiple files to AWS S3",
+        "operationId": "uploadS3",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "file",
+            "name": "file",
+            "description": "",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UploadS3Res"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/user": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get Current Admin",
+        "description": "Get authenticated admin profile.",
+        "operationId": "getCurrentAdmin",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetCurrentAdminRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/users-all": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get Users",
+        "description": "Get Users in chat .",
+        "operationId": "getUsers",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetUsersSearch"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/user-update": {
+      "put": {
+        "tags": ["user"],
+        "summary": "Update Current User",
+        "description": "Update authenticated user profile.",
+        "operationId": "updateCurrentUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCurrentUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateCurrentUserRes"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/user/password": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Update Password",
+        "description": "Update password.",
+        "operationId": "updatePassword",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatePasswordReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdatePasswordRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Create User",
+        "description": "Create a new user",
+        "operationId": "createUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["users"],
+        "summary": "Get All Users",
+        "description": "Get All Users",
+        "operationId": "getAllUsers",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "userKind",
+            "description": "User Kind Query",
+            "required": false,
+            "type": "string",
+            "enum": ["STANDARD", "BREEDER", "ADMIN"]
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search Post by multiple fields",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetUsersRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/users/{userId}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get User Profile",
+        "description": "Replace the {userId} by the id of the user desired to get profile , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "getUserProfile",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "Id of the User",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetUserProfileRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["users"],
+        "summary": "Update User",
+        "description": "Replace the {userId} by the id of the user desired to update , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "updateUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "Id of the User",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["users"],
+        "summary": "Update User Activation Status",
+        "description": "Replace the {userId} by the id of the user desired to update activation status , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "updateUserActivationStatus",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "Id of the User",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserActivationStatusReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateUserActivationStatusRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Delete User",
+        "description": "Replace the {userId} by the id of the user desired to delete , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "deleteUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "Id of the User",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DeleteUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/users-count": {
+      "get": {
+        "tags": ["users"],
+        "summary": "count All Users",
+        "description": "count All Users",
+        "operationId": "countAllUsers",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CountUsersRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/users-online": {
+      "get": {
+        "tags": ["users"],
+        "summary": "count Users online",
+        "description": "count Users online",
+        "operationId": "countUsersOnline",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "year",
+            "description": "Year filter",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CountUsersOnlineRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/users-date": {
+      "get": {
+        "tags": ["users"],
+        "summary": "count users created by month,week and year",
+        "description": "count users created by month,week and year",
+        "operationId": "countUsersCreated",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CountUsersOnlineByDate"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/users-state": {
+      "get": {
+        "tags": ["users"],
+        "summary": "count users by state",
+        "description": "count users by state",
+        "operationId": "countUsersByState",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CountUsersByStateRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-most-fav": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Get Most Fav Post",
+        "description": "Get Most Fav Post",
+        "operationId": "getAllPostsFav",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPostsResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-count-pet": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Count Posts By Breeder",
+        "description": "Count Posts By Breeder",
+        "operationId": "countPostByPet",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CountPostsByPetType"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-count-pet-breeder": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Count Posts By Breeder Kind",
+        "description": "Count Posts By Breeder Kind",
+        "operationId": "countPostByBreederKind",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CountPostsByPetType"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-count-kind": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Count Posts By Kind",
+        "description": "Count Posts By Kind",
+        "operationId": "countPostByKind",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CountPostsByKind"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-count-breeder": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Count Posts By Breeder",
+        "description": "Count Posts By Breeder",
+        "operationId": "countPostByBreeder",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetCountPostByBreedResp"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-count": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Count all posts by state ",
+        "description": "return the count of posts by each state ",
+        "operationId": "countPostState",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/countPostStateRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/posts/count-posts-type": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Count all posts by user type ",
+        "description": "return the count of posts by the type ",
+        "operationId": "countPostType",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userType",
+            "description": "User Type STANDARD/BREEDER",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/countPostType"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/posts-count-posts-group": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Count all posts by user type grouped ",
+        "description": "return the count of posts by the type grouped",
+        "operationId": "countPostGroup",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/countPostGroup"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/posts-count-date": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Count all posts grouped by month,week or year ",
+        "description": "Count all posts grouped by month,week or year ",
+        "operationId": "countPostStats",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "description": "User Type YEAR/MONTH/WEEK",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CountPostByDateResp"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/admin/posts": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Get All Posts",
+        "description": "Get All Posts",
+        "operationId": "getAllPosts",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "postedBy",
+            "description": "Filter by User ID",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "description": "Filter Query",
+            "required": false,
+            "type": "string",
+            "enum": ["RECENTLY_ADDED", "MOST_VIEWED"]
+          },
+          {
+            "in": "query",
+            "name": "petType",
+            "description": "Pet Type Query",
+            "required": false,
+            "type": "string",
+            "enum": ["CAT", "DOG"]
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "description": "State Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petAge",
+            "description": "Filter by Age (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petSize",
+            "description": "Filter by Size (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petExpectedAdultSize",
+            "description": "Filter by Expected Adult Size (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petVeterinaryChecked",
+            "description": "Filter by Veterinary Checked (pass 1 if true, else 0)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petSex",
+            "description": "Filter by Sex (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petGoodWith",
+            "description": "Filter by Good With (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petCoatLength",
+            "description": "Filter by Coat Length (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petCare",
+            "description": "Filter by Care (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petIsInShelter",
+            "description": "Filter by Is In Shelter (pass 1 if true, else 0)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search Post by multiple fields",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPostsResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-user/{userId}": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Get All Posts by one user",
+        "description": "Get All Posts by one user",
+        "operationId": "getAllPostsByUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "postedBy",
+            "description": "Filter by User ID",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "description": "Filter Query",
+            "required": false,
+            "type": "string",
+            "enum": ["RECENTLY_ADDED", "MOST_VIEWED"]
+          },
+          {
+            "in": "query",
+            "name": "petType",
+            "description": "Pet Type Query",
+            "required": false,
+            "type": "string",
+            "enum": ["CAT", "DOG"]
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "description": "State Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petAge",
+            "description": "Filter by Age (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petSize",
+            "description": "Filter by Size (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petExpectedAdultSize",
+            "description": "Filter by Expected Adult Size (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petVeterinaryChecked",
+            "description": "Filter by Veterinary Checked (pass 1 if true, else 0)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petSex",
+            "description": "Filter by Sex (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petGoodWith",
+            "description": "Filter by Good With (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petCoatLength",
+            "description": "Filter by Coat Length (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petCare",
+            "description": "Filter by Care (comma separated values)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "petIsInShelter",
+            "description": "Filter by Is In Shelter (pass 1 if true, else 0)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search Post by multiple fields",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPostsResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-count-user/{userId}": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "count All Posts by one user",
+        "description": "count All Posts by one user",
+        "operationId": "countAllPostsByUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPostsResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts/{postId}": {
+      "delete": {
+        "tags": ["posts"],
+        "summary": "Delete exisiting Post",
+        "description": "Replace the {postId} by the id of the post desired to delete , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "deletePost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EditPostResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["posts"],
+        "summary": "get exisiting Post",
+        "description": "Replace the {postId} by the id of the post desired to fetch ",
+        "operationId": "getSinglePost",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSinglePostResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-imgs/{postId}": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "get exisiting Post images",
+        "description": "Replace the {postId} by the id of the post desired to fetch ",
+        "operationId": "getSinglePostImgs",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSinglePostImagesResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-pet/{postId}": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "get Pet By Post Id",
+        "description": "Replace the {postId} by the id of the post desired to fetch ",
+        "operationId": "getSinglePostPet",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSinglePostPetResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/posts-owner/{postId}": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "get Seller Info By Post Id",
+        "description": "Replace the {postId} by the id of the post desired to fetch ",
+        "operationId": "getSinglePostSeller",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "description": "Id of the Post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPetSellerResponse"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/chat/messages": {
+      "post": {
+        "tags": ["chat"],
+        "summary": "Send Message",
+        "description": "Send a new message",
+        "operationId": "sendMessage",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SendMessageReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SendMessageRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get Messages",
+        "description": "Get Conversation Messages",
+        "operationId": "getMessages",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "conversationId",
+            "description": "conversation Id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetMessagesRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/chat/conversations/user": {
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get Conversation User",
+        "description": "Get Conversation User",
+        "operationId": "getConversationUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "conversationId",
+            "description": "conversation Id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetConversationUserRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/chat/conversations": {
+      "get": {
+        "tags": ["chat"],
+        "summary": "Get Conversations",
+        "description": "Get Conversations",
+        "operationId": "getConversations",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "description": "Page Number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "description": "Page Size(items per page)",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "description": "Search Post by User First Name or Last Name",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetConversationsRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/kanban": {
+      "get": {
+        "tags": ["kanban"],
+        "summary": "Get Kanban",
+        "description": "Get Kanban",
+        "operationId": "getKanban",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetKanbanRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["kanban"],
+        "summary": "Update Kanban",
+        "description": "Update Kanban",
+        "operationId": "updateKanban",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateKanbanReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateKanbanRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/kanban/columns": {
+      "post": {
+        "tags": ["kanban"],
+        "summary": "Create Kanban Column",
+        "description": "Create a new Kanban Column",
+        "operationId": "createKanbanColumn",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateKanbanColumnReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateKanbanColumnRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/kanban/columns/{kanbanColumnId}": {
+      "put": {
+        "tags": ["kanban"],
+        "summary": "Update Kanban Column",
+        "description": "Replace the {kanbanColumnId} by the id of the task desired to update , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "updateKanbanColumn",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kanbanColumnId",
+            "description": "Id of the Kanban Column",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateKanbanColumnReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateKanbanColumnRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["kanban"],
+        "summary": "Delete Kanban Column",
+        "description": "Replace the {kanbanColumnId} by the id of the Kanban Column desired to delete , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "deleteKanbanColumn",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kanbanColumnId",
+            "description": "Id of the Kanban Column",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DeleteKanbanColumnRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/kanban/columns/position": {
+      "post": {
+        "tags": ["kanban"],
+        "summary": "Set Kanban Columns Position",
+        "description": "Set Kanban Columns Position",
+        "operationId": "setKanbanColumnsPosition",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SetKanbanColumnsPositionReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SetKanbanColumnsPositionRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/kanban/cards": {
+      "post": {
+        "tags": ["kanban"],
+        "summary": "Create Kanban Card",
+        "description": "Create a new Kanban Card",
+        "operationId": "createKanbanCard",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateKanbanCardReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateKanbanCardRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/kanban/cards/{kanbanCardId}": {
+      "put": {
+        "tags": ["kanban"],
+        "summary": "Update Kanban Card",
+        "description": "Replace the {kanbanCardId} by the id of the Kanban Card desired to update , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "updateKanbanCard",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kanbanCardId",
+            "description": "Id of the Kanban Card",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateKanbanCardReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateKanbanCardRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["kanban"],
+        "summary": "Delete Kanban Card",
+        "description": "Replace the {kanbanCardId} by the id of the Kanban Card desired to delete , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "deleteKanbanCard",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kanbanCardId",
+            "description": "Id of the Kanban Card",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DeleteKanbanCardRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/kanban/cards/{kanbanCardId}/comments": {
+      "post": {
+        "tags": ["kanban"],
+        "summary": "Add Kanban Card Comment",
+        "description": "Replace the {kanbanCardId} by the id of the Kanban Card desired to update , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "addKanbanCardComment",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kanbanCardId",
+            "description": "Id of the Kanban Card",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddKanbanCardCommentReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AddKanbanCardCommentRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["kanban"],
+        "summary": "Edit Kanban Card Comment",
+        "description": "Replace the {kanbanCardId} by the id of the Kanban Card desired to update , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "editKanbanCardComment",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kanbanCardId",
+            "description": "Id of the Kanban Card",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EditKanbanCardCommentReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EditKanbanCardCommentRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["kanban"],
+        "summary": "Remove Kanban Card Comment",
+        "description": "Replace the {kanbanCardId} by the id of the KanbanCard desired to delete , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "removeKanbanCardComment",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kanbanCardId",
+            "description": "Id of the Kanban Card",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RemoveKanbanCardCommentReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RemoveKanbanCardCommentRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/events": {
+      "post": {
+        "tags": ["events"],
+        "summary": "Create Event",
+        "description": "Create a new Event",
+        "operationId": "createEvents",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateEventReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateEventRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["events"],
+        "summary": "Get All Events",
+        "description": "Get All Events",
+        "operationId": "getAllEvents",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetEventsRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/search": {
+      "get": {
+        "tags": ["keywords"],
+        "summary": "get all keywords ",
+        "description": "Get keywords",
+        "operationId": "getAllKeyWords",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSearchKeywordsRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/search-count": {
+      "get": {
+        "tags": ["keywords"],
+        "summary": "Get count keyword ",
+        "description": "Get countsearch keyword",
+        "operationId": "countKeywords",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetCountSearchKeywordsRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/events/{eventId}": {
+      "delete": {
+        "tags": ["events"],
+        "summary": "Delete Event",
+        "description": "Replace the {eventId} by the id of the event desired to delete , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "deleteEvent",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "eventId",
+            "description": "Id of the Event",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DeleteEventRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["events"],
+        "summary": "Edit Event",
+        "description": "Replace the {eventId} by the id of the event desired to update , all the fields are optional ,just specify the field you want to change ",
+        "operationId": "updateEvent",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "eventId",
+            "description": "Id of the event",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateEventReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UpdateEventRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/notifications/v2": {
+      "get": {
+        "tags": ["notifications-grouped"],
+        "summary": "Get Notifications grouped by",
+        "description": "Get Notifications",
+        "operationId": "getNotificationsV2",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetNotificationsResponseGroupped"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/notifications": {
+      "get": {
+        "tags": ["notifications"],
+        "summary": "Get Notifications",
+        "description": "Get Notifications",
+        "operationId": "getNotifications",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetNotificationsResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["notifications"],
+        "summary": "Marked Readen ",
+        "description": "Mark Notification as readen",
+        "operationId": "markAsReaden",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/markAsReadenReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/markAsReaden"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/notifications-multi": {
+      "put": {
+        "tags": ["notifications"],
+        "summary": "Marked Readen Multiple",
+        "description": "Mark Notification as readen Multiple",
+        "operationId": "markAsReadenMulti",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/markAsReadenMultiReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/markAsReaden"
+            }
+          },
+          "400": {
+            "description": "Invalid Request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/ga/sessions-platform": {
+      "get": {
+        "tags": ["googleAnalytics"],
+        "summary": "Get Sessions By Platform",
+        "description": "Get Sessions By Platform",
+        "operationId": "getSessionsByPlatform",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsByPlatformRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/ga/sessions-device-category": {
+      "get": {
+        "tags": ["googleAnalytics"],
+        "summary": "Get Sessions By Device Category",
+        "description": "Get Sessions By Device Category",
+        "operationId": "getSessionsByDeviceCategory",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsByDeviceCategoryRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/ga/sessions-region": {
+      "get": {
+        "tags": ["googleAnalytics"],
+        "summary": "Get Sessions By Region",
+        "description": "Get Sessions By Region",
+        "operationId": "getSessionsByRegion",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsByRegionRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/ga/sessions-last-7-days": {
+      "get": {
+        "tags": ["googleAnalytics"],
+        "summary": "Get Sessions By Last 7 Days",
+        "description": "Get Sessions By Last 7 Days",
+        "operationId": "getSessionsByLast7Days",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsByLast7DaysRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/ga/sessions-default-channel-group": {
+      "get": {
+        "tags": ["googleAnalytics"],
+        "summary": "Get Sessions By Default Channel Group",
+        "description": "Get Sessions By Default Channel Group",
+        "operationId": "getSessionsByDefaultChannelGroup",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsByDefaultChannelGroupRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/ga/sessions-os": {
+      "get": {
+        "tags": ["googleAnalytics"],
+        "summary": "Get Sessions By Operating System",
+        "description": "Get Sessions By Operating System",
+        "operationId": "getSessionsByOperatingSystem",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsByOperatingSystemRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/ga/sessions-device-brand": {
+      "get": {
+        "tags": ["googleAnalytics"],
+        "summary": "Get Sessions By DeviceBrand",
+        "description": "Get Sessions By Device Brand",
+        "operationId": "getSessionsByDeviceBrand",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetSessionsByDeviceBrandRes"
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "GetSuburbsRes": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string"
+        },
+        "suburbs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GetSuberbsByStateReq": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "GetStatesRes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "GetStatesResByState": {
+      "type": "object",
+      "properties": {
+        "suburbs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "postCode": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "SendPasswordResetEmailReq": {
+      "type": "object",
+      "required": ["email"],
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "SendPasswordResetEmailRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ResetPasswordReq": {
+      "type": "object",
+      "required": ["passwordRecoveryToken", "newPassword"],
+      "properties": {
+        "passwordRecoveryToken": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "ResetPasswordRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "SignInUserReq": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "SignInUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "lastSignIn": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/definitions/GetCurrentAdminRes"
+        }
+      }
+    },
+    "SignOutUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdatePasswordReq": {
+      "type": "object",
+      "required": ["oldPassword", "newPassword"],
+      "properties": {
+        "oldPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdatePasswordRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UploadS3Res": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetCurrentAdminRes": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "account": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "isVerified": {
+              "type": "boolean"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "suburb": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "zipCode": {
+              "type": "integer"
+            },
+            "avatarUrl": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "countPostStateRes": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "number"
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "count": {
+                "type": "number"
+              },
+              "percentage": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "countPostType": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "number"
+        }
+      }
+    },
+    "countPostGroup": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "GetUsersRes": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "avatarUrl": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "activationStatus": {
+                "type": "string",
+                "enum": ["ACTIVE", "INACTIVE", "SUSPENDED", "BLOCKED"]
+              },
+              "isVerified": {
+                "type": "boolean"
+              },
+              "registrationMethod": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "CountUsersRes": {
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "type": "number"
+        },
+        "counts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "count": {
+                "type": "number"
+              },
+              "lastDayCount": {
+                "type": "number"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "dailyPercentageChange": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "CountUsersOnlineRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "months": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "series": {
+              "type": "object",
+              "properties": {
+                "year": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "CountUsersOnlineByDate": {
+      "type": "object",
+      "properties": {
+        "lastWeek": {
+          "type": "object",
+          "properties": {
+            "created": {
+              "type": "integer"
+            },
+            "percentageChange": {
+              "type": "string"
+            }
+          }
+        },
+        "lastMonth": {
+          "type": "object",
+          "properties": {
+            "created": {
+              "type": "integer"
+            },
+            "percentageChange": {
+              "type": "string"
+            }
+          }
+        },
+        "lastYear": {
+          "type": "object",
+          "properties": {
+            "created": {
+              "type": "integer"
+            },
+            "percentageChange": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "CountUsersByStateRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              }
+            },
+            "required": ["_id", "count"]
+          }
+        }
+      }
+    },
+    "GetPostsV2Response": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "posts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "postId": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "adoptionFee": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "breed": {
+                "type": "string"
+              },
+              "dadBreed": {
+                "type": "string"
+              },
+              "momBreed": {
+                "type": "string"
+              },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "string"
+                  },
+                  "suburb": {
+                    "type": "string"
+                  }
+                }
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "childImages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "isLiked": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetSinglePostResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "post": {
+          "type": "object",
+          "properties": {
+            "postId": {
+              "type": "string"
+            },
+            "kind": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "price": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "adoptionFee": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "pet": {
+              "type": "object",
+              "properties": {
+                "petType": {
+                  "type": "string"
+                },
+                "microshipId": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "breed": {
+                  "type": "string"
+                },
+                "dadBreed": {
+                  "type": "string"
+                },
+                "momBreed": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "string"
+                },
+                "isDesexed": {
+                  "type": "boolean"
+                },
+                "age": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "string"
+                },
+                "veterinaryChecked": {
+                  "type": "boolean"
+                },
+                "isVaccinated": {
+                  "type": "boolean"
+                },
+                "coatLength": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "isInShelter": {
+                  "type": "boolean"
+                },
+                "care": {
+                  "type": "string"
+                },
+                "expectedAdultSize": {
+                  "type": "string"
+                },
+                "goodWith": {
+                  "type": "string"
+                }
+              }
+            },
+            "location": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "suburb": {
+                  "type": "string"
+                },
+                "latitude": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "longitude": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            },
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "childImages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "parentImages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "postedBy": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "suburb": {
+                  "type": "string"
+                },
+                "zipCode": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                },
+                "breederPrefix": {
+                  "type": "string"
+                },
+                "breederBio": {
+                  "type": "string"
+                }
+              }
+            },
+            "likes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      }
+    },
+    "GetSinglePostPetResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "pet": {
+          "type": "object",
+          "properties": {
+            "petType": {
+              "type": "string"
+            },
+            "microshipId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "breed": {
+              "type": "string"
+            },
+            "dadBreed": {
+              "type": "string"
+            },
+            "momBreed": {
+              "type": "string"
+            },
+            "sex": {
+              "type": "string"
+            },
+            "isDesexed": {
+              "type": "boolean"
+            },
+            "age": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "veterinaryChecked": {
+              "type": "boolean"
+            },
+            "isVaccinated": {
+              "type": "boolean"
+            },
+            "coatLength": {
+              "type": "string"
+            },
+            "color": {
+              "type": "string"
+            },
+            "isInShelter": {
+              "type": "boolean"
+            },
+            "care": {
+              "type": "string"
+            },
+            "expectedAdultSize": {
+              "type": "string"
+            },
+            "goodWith": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "GetPetSellerResponse": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "account": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "isVerified": {
+              "type": "boolean"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "avatarUrl": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "GetSinglePostImagesResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "imgs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "EditPostResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateUserReq": {
+      "type": "object",
+      "required": ["kind", "isVerified", "email", "firstName", "lastName"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["STANDARD", "BREEDER", "ADMIN"]
+        },
+        "isVerified": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "suburb": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "avatarUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "userId": {
+          "type": "string"
+        }
+      }
+    },
+    "DeleteUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdateCurrentUserReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "suburb": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bio": {
+          "type": "string"
+        },
+        "avatarUrl": {
+          "type": "string"
+        },
+        "deviceId": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateCurrentUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdateUserActivationStatusReq": {
+      "type": "object",
+      "properties": {
+        "activationStatus": {
+          "type": "string",
+          "enum": ["ACTIVE", "INACTIVE", "SUSPENDED", "BLOCKED"]
+        }
+      }
+    },
+    "UpdateUserActivationStatusRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "GetUserProfileRes": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "userId": {
+              "type": "string"
+            },
+            "account": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string"
+                },
+                "activationStatus": {
+                  "type": "string",
+                  "enum": ["ACTIVE", "INACTIVE", "SUSPENDED", "BLOCKED"]
+                },
+                "isVerified": {
+                  "type": "boolean"
+                },
+                "registrationMethod": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "lastSignIn": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            },
+            "profile": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "suburb": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "zipCode": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "bio": {
+                  "type": "string"
+                },
+                "avatarUrl": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "posts": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "postId": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "adoptionFee": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "breed": {
+                    "type": "string"
+                  },
+                  "dadBreed": {
+                    "type": "string"
+                  },
+                  "momBreed": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "type": "string"
+                      },
+                      "suburb": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "childImages": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "isLiked": {
+                    "type": "boolean"
+                  },
+                  "likesCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "UpdateUserReq": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["STANDARD", "BREEDER", "ADMIN"]
+        },
+        "activationStatus": {
+          "type": "string",
+          "enum": ["ACTIVE", "INACTIVE", "SUSPENDED", "BLOCKED"]
+        },
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "suburb": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "avatarUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "countTotalPostByUserRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "count": {
+          "type": "number"
+        }
+      }
+    },
+    "GetPostsResponse": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "posts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "postId": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "price": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "adoptionFee": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "pet": {
+                "type": "object",
+                "properties": {
+                  "petType": {
+                    "type": "string"
+                  },
+                  "microshipId": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "breed": {
+                    "type": "string"
+                  },
+                  "dadBreed": {
+                    "type": "string"
+                  },
+                  "momBreed": {
+                    "type": "string"
+                  },
+                  "sex": {
+                    "type": "string"
+                  },
+                  "isDesexed": {
+                    "type": "boolean"
+                  },
+                  "age": {
+                    "type": "string"
+                  },
+                  "size": {
+                    "type": "string"
+                  },
+                  "veterinaryChecked": {
+                    "type": "boolean"
+                  },
+                  "isVaccinated": {
+                    "type": "boolean"
+                  },
+                  "coatLength": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "string"
+                  },
+                  "isInShelter": {
+                    "type": "boolean"
+                  },
+                  "care": {
+                    "type": "string"
+                  },
+                  "expectedAdultSize": {
+                    "type": "string"
+                  },
+                  "goodWith": {
+                    "type": "string"
+                  }
+                }
+              },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "string"
+                  },
+                  "suburb": {
+                    "type": "string"
+                  },
+                  "latitude": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                }
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "childImages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "parentImages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "postedBy": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "suburb": {
+                    "type": "string"
+                  },
+                  "zipCode": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "avatarUrl": {
+                    "type": "string"
+                  },
+                  "breederPrefix": {
+                    "type": "string"
+                  },
+                  "breederBio": {
+                    "type": "string"
+                  }
+                }
+              },
+              "likes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetCountPostByBreedResp": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "breed": "string",
+              "count": "number"
+            }
+          }
+        }
+      }
+    },
+    "CountPostsByPetType": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "total": {
+          "type": "integer"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "breed": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "percentage": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            "required": ["breed", "count", "percentage"]
+          }
+        }
+      },
+      "required": ["success", "total", "result"]
+    },
+    "CountPostsByKind": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "total": {
+          "type": "integer"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "percentage": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            "required": ["type", "count", "percentage"]
+          }
+        }
+      },
+      "required": ["success", "total", "result"]
+    },
+    "CountPostByDateResp": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "countOutput": {
+          "type": "object",
+          "properties": {
+            "categories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "series": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "CountByMonthDto": {
+      "type": "object",
+      "properties": {
+        "month": {
+          "type": "number"
+        },
+        "count": {
+          "type": "number"
+        }
+      }
+    },
+    "CountByWeekDto": {
+      "type": "object",
+      "properties": {
+        "week": {
+          "type": "number"
+        },
+        "count": {
+          "type": "number"
+        }
+      }
+    },
+    "CountByYearDto": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "number"
+        },
+        "count": {
+          "type": "number"
+        }
+      }
+    },
+    "SendMessageReq": {
+      "type": "object",
+      "required": ["receiverId", "messageType", "body"],
+      "properties": {
+        "receiverId": {
+          "type": "string"
+        },
+        "messageType": {
+          "type": "string",
+          "enum": ["TEXT", "IMAGE", "FILE"]
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    },
+    "SendMessageRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "conversationId": {
+          "type": "string"
+        }
+      }
+    },
+    "GetConversationsRes": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "conversations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "conversationId": {
+                "type": "string"
+              },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "avatarUrl": {
+                    "type": "string"
+                  },
+                  "isArchived": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "lastMessage": {
+                "type": "object",
+                "properties": {
+                  "messageType": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "sentAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              },
+              "unseen": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetConversationUserRes": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "userId": {
+              "type": "string"
+            },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "avatarUrl": {
+              "type": "string"
+            },
+            "isArchived": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "GetMessagesRes": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hasNext": {
+          "type": "boolean"
+        },
+        "pageNumber": {
+          "type": "string"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "messageId": {
+                "type": "string"
+              },
+              "senderType": {
+                "type": "string",
+                "description": "must be 'ME' or 'OTHER'"
+              },
+              "messageType": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "sentAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "seenAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetKanbanRes": {
+      "type": "object",
+      "properties": {
+        "board": {
+          "type": "object",
+          "properties": {
+            "cards": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "attachments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "assignee": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "avatar": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "reporter": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "avatar": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "priority": {
+                    "type": "string"
+                  },
+                  "due": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  },
+                  "isCompleted": {
+                    "type": "boolean"
+                  },
+                  "comments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "avatar": {
+                          "type": "string"
+                        },
+                        "messageType": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "columns": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "cardIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "columnOrder": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "UpdateKanbanReq": {
+      "type": "object",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "cardIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "UpdateKanbanRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateKanbanColumnReq": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateKanbanCardReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "assignee": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "avatar": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "reporter": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "due": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "isCompleted": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateKanbanColumnRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "kanbanColumnId": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateKanbanColumnReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateKanbanColumnRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "DeleteKanbanColumnRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "SetKanbanColumnsPositionReq": {
+      "type": "object",
+      "required": ["ids"],
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "SetKanbanColumnsPositionRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateKanbanCardReq": {
+      "type": "object",
+      "required": ["kanbanColumnId", "name"],
+      "properties": {
+        "kanbanColumnId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "assignee": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "reporter": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "priority": {
+          "type": "string"
+        },
+        "due": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "isCompleted": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateKanbanCardRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "kanbanCardId": {
+          "type": "string"
+        }
+      }
+    },
+    "DeleteKanbanCardRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdateKanbanCardRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AddKanbanCardCommentReq": {
+      "type": "object",
+      "required": ["messageType", "message"],
+      "properties": {
+        "messageType": {
+          "type": "string",
+          "enum": ["TEXT", "IMAGE", "FILE"]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "AddKanbanCardCommentRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "createdAt": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "messageType": {
+          "type": "string",
+          "enum": ["image", "text"]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "EditKanbanCardCommentReq": {
+      "type": "object",
+      "required": ["kanbanCardCommentId", "messageType", "message"],
+      "properties": {
+        "kanbanCardCommentId": {
+          "type": "string"
+        },
+        "messageType": {
+          "type": "string",
+          "enum": ["TEXT", "IMAGE", "FILE"]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "EditKanbanCardCommentRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RemoveKanbanCardCommentReq": {
+      "type": "object",
+      "required": ["kanbanCardCommentId"],
+      "properties": {
+        "kanbanCardCommentId": {
+          "type": "string"
+        }
+      }
+    },
+    "RemoveKanbanCardCommentRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateEventRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateEventReq": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        },
+        "isAllDay": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": "string"
+        }
+      },
+      "required": ["title", "createdBy", "start", "end", "isAllDay", "color"],
+      "additionalProperties": false
+    },
+    "GetEventsRes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "isAllDay": {
+            "type": "boolean"
+          }
+        },
+        "required": ["title", "start", "end"],
+        "additionalProperties": false
+      }
+    },
+    "UpdateEventReq": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isAllDay": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdateEventRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "DeleteEventRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "GetNotificationsResponse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "receiverId": {
+            "type": "string"
+          },
+          "senderId": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "entityId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isReaden": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "GetNotificationsResponseGroupped": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          },
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "entityId": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "markAsReaden": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "markAsReadenReq": {
+      "type": "object",
+      "properties": {
+        "postId": {
+          "type": "string"
+        }
+      }
+    },
+    "markAsReadenMultiReq": {
+      "type": "object",
+      "properties": {
+        "entityList": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "GetSearchKeywordsRes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "keyword": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "GetCountSearchKeywordsRes": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        }
+      }
+    },
+    "GetUsersSearch": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "account": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string"
+              }
+            }
+          },
+          "profile": {
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "avatarUrl": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetSessionsByPlatformRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "platform": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "percentage": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetSessionsByDeviceCategoryRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "lastMonth": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetSessionsByRegionRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "region": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetSessionsByLast7DaysRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "fill": {
+                "type": "string"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetSessionsByDefaultChannelGroupRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetSessionsByOperatingSystemRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "os": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetSessionsByDeviceBrandRes": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "brand": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
